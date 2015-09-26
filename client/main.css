@@ -1,0 +1,24 @@
+/* CSS declarations go here */
+#q {
+  margin: 20px 0;
+}
+
+.footer {
+  margin-top: 50px;
+}
+
+.small {
+  font-size: 90%;
+}
+
+.text-danger a {
+	color: red;
+}
+
+.label a {
+	color: white;
+}
+
+.label {
+	margin-right: 3px;
+}
