@@ -4,80 +4,89 @@ Session.setDefault('q', '');
 Router.route('add');
 
 Router.route('bad', {
-  data: function () { return Apps.find({}, { sort: { bad: 1 } }); },
-  waitOn: function () { Meteor.subscribe('appsAdmin', Session.get('q')); }
+  data() { return Apps.find({}, { sort: { rank: 1 } }); },
+  waitOn() { Meteor.subscribe('appsAdmin', Session.get('q')); },
 });
 
 Router.route('/:q?', {
   name: 'home',
-  onRun: function () { if(this.params.q) Session.set('q', this.params.q); this.next(); },
-  data: function () { return Apps.find({}, { sort: { meteorRank: 1 } }); },
-  subscriptions: function () { return Meteor.subscribe('apps', Session.get('q')); },
+  onRun() { if (this.params.q) Session.set('q', this.params.q); this.next(); },
+  data() { return Apps.find({}, { sort: { meteorRank: 1 } }); },
+  subscriptions() { return Meteor.subscribe('apps', Session.get('q')); },
 });
 
-Template.searchBar.rendered = function () {
+Template.searchBar.onRendered(() => {
   $('#q').val(Session.get('q'));
   $('#q').focus();
-};
+});
 
 Template.searchBar.events({
-  'keyup #q': function (e) {
+  'keyup #q'(e) {
     Session.set('q', e.target.value);
   },
 });
 
 Template.app.events({
-  'click .refresh': function() {
+  'click .refresh'() {
     Meteor.call('refresh', this._id);
     return false;
   },
-  'click .remove': function() {
+  'click .remove'() {
     Meteor.call('remove', this._id);
+    return false;
+  },
+  'click .disqualify'() {
+    Meteor.call('disqualify', this._id);
     return false;
   },
 });
 
 Template.app.helpers({
-  date: function () {
-    return moment(this.lastUpdated).fromNow();
+  date() {
+    return moment(this.updatedAt).fromNow();
   },
-  errors: function () {
-    var err = [];
-    if(this.badgit) err.push('bad github url.');
-    if(!this.changelogUrl) err.push('no changelog.');
-    return err.length > 0 ? 'For the maintainer: ' + err.join(' ') : undefined;
+  class() {
+    if (this.indexOf(':') !== -1) return 'label-info';
+    else if (this === 'insecure') return 'label-danger';
+    return 'label-default';
   },
-  class: function () {
-    if(this.indexOf(':') !== -1)
-      return 'label-info';
-    else if(this == 'insecure')
-      return 'label-danger';
-    else
-      return 'label-default';
-  },
-  collectionCount: function () {
+  collectionCount() {
     return this.collections && this.collections.length;
   },
-  packageCount: function () {
+  packageCount() {
     return this.packages && this.packages.length;
   },
-  atmoUrl: function () {
-    if(!this) return undefined;
-    var pos = this.indexOf(':');
-    if(pos !== -1)
-      return 'https://atmospherejs.com/'+this.substr(0, pos)+'/'+this.substr(pos+1);
-    else
-      return undefined;
+  fastoUrl() {
+    if (!this) return undefined;
+    return 'http://fastosphere.meteor.com/' + this;
+  },
+  fullUrl(url) {
+    if (url && url.indexOf('http') !== 0) return 'http://' + url;
+    return url;
   },
 });
 
 Template.add.events({
-  'submit .newApps': function (event) {
-    var apps = event.target.textarea.value;
-    Meteor.call('add', apps, function (error) {
-      if(error) { console.log('error', error); toastr.error(error.reason); return; }
-      event.target.textarea.value = '';
+  'submit .newApps'(event) {
+    let apps = event.target.textarea.value;
+    Meteor.call('add', apps, (error) => {
+      if (error) { console.log('error', error); toastr.error(error.reason); return; }
       toastr.success('Added to the queue, it\'ll be parsed soon');
+
+      apps = apps.replace(';', ' ');
+      apps = apps.replace(',', ' ');
+      apps = apps.replace(/\s+/g, ' ');
+      if (apps) {
+        apps = apps.split(' ');
+        apps = apps.filter(Boolean);
+        if (apps.length) {
+          console.log('dddd', apps);
+          $('#q').val(apps[0]);
+          Session.set('q', apps[0]);
+        }
+      }
+      Router.go('/');
+      event.target.textarea.value = '';
     });
     return false;
   }

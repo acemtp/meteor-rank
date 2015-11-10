@@ -22,3 +22,7 @@
 .label {
 	margin-right: 3px;
 }
+
+.panel {
+  overflow: hidden;
+}

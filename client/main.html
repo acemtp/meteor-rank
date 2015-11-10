@@ -24,7 +24,7 @@
 
         <div class="jumbotron">
           <h1>Ranked Meteor Apps</h1>
-          <p>List Meteor Apps ranked by their Alexa score.<span class="pull-right"><a href="/add" class="btn btn-primary">Add apps</a></span></p>
+          <p>Meteor Apps ranked by their Alexa score.<span class="pull-right"><a href="/add" class="btn btn-primary">Add apps</a></span></p>
           <input type="text" name="q" id="q" autocomplete="off" spellcheck="false" autocorrect="false" class="form-control string" placeholder="Search by app name..." />
         </div>
       </div>
@@ -35,7 +35,7 @@
 <template name="app">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <a href="http://{{url}}" target="_blank"><b>{{url}}</b></a> (<a href="view-source:http://{{url}}" target="_blank">html</a> | <a href="{{meteorJS}}" target="_blank">js</a>)
+      <a href="{{fullUrl url}}" target="_blank"><b>{{url}}</b></a> (<a href="view-source:{{fullUrl url}}" target="_blank">html</a> | <a href="{{fullUrl meteorJS}}" target="_blank">js</a>)
       <span class="pull-right">
         {{#if meteorRank}}
           Rank: <b>{{meteorRank}}</b>
@@ -57,9 +57,10 @@
           <a href="#" class="btn btn-default refresh">refresh</a><br>
           {{#if currentUser}}
             <a href="#" class="btn btn-danger remove">remove</a><br>
+            <a href="#" class="btn btn-warning disqualify">disqualify</a><br>
           {{/if}}
-          {{#if bad}}
-            <span class="text-danger">{{bad}}</span><br>
+          {{#if error}}
+            <span class="text-danger">{{error}}</span><br>
           {{/if}}
         </div>
       </div>
@@ -67,8 +68,8 @@
       {{#if packages}}
         {{#each packages}}
           <span class="label {{class}}">
-            {{#if atmoUrl}}
-              <a href="{{atmoUrl}}" target="_blank">{{this}}</a>
+            {{#if fastoUrl}}
+              <a href="{{fastoUrl}}" target="_blank">{{this}}</a>
             {{else}}
               {{this}}
             {{/if}}
