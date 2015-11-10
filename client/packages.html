@@ -1,0 +1,23 @@
+<template name="packages">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-offset-2 col-sm-8 col-xs-12">
+        {{#each this}}
+          {{> package}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  {{> footer}}
+</template>
+
+<template name="package">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <a href="http://fastosphere.meteor.com/{{name}}" target="_blank"><b>{{name}}</b></a> {{percent}}% of apps use it
+      <span class="pull-right">
+        Rank: <b>{{rank}}</b>
+      </span>
+    </div>
+  </div>
+</template>

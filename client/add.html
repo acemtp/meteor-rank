@@ -1,0 +1,18 @@
+<template name="add">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-offset-1 col-sm-10 col-xs-12">
+        <div class="jumbotron">
+          <h1>Add Meteor Apps</h1>
+          <p>Add one or more Urls of Meteor apps, separated by space or comma or tab or semicolon...</p>
+          <span class="small">You cannot add subdomain of {{subs}}</span>
+          <form class="newApps">
+            <textarea class="form-control" name="textarea" rows="10" id="textarea"></textarea>
+            <span><a href="/" class="btn btn-default">Back</a></span>
+            <button type="submit" class="btn btn-primary pull-right">Add Apps</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

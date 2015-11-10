@@ -274,8 +274,8 @@
     "alexaUpdate": true,
     "rankUpdate": true,
     "meteorUpdate": true,
+    "Packages": true,
 
-    "githubUpdate": true,
     "semverExtract": true,
     "semverCompare": true,
     "debug": true,

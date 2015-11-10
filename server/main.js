@@ -24,6 +24,7 @@ Meteor.publish('appsAdmin', q => {
   return Apps.find(selector, { limit: 50, sort: { rank: 1 } });
 });
 
+
 const extractUrl = url => {
   const re = /(?:https?:\/\/)?(?:www\.)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6})\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/g;
   const m = re.exec(url);
